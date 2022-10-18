@@ -20,21 +20,51 @@ function AuthProvider({ children }) {
         loadStorage();
     }, []);
 
+    // Fazer login do usuário
+    async function signIn(email, password){
+        setLoadingAuth(true);
+
+        await firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(async (value)=> {
+            let uid = value.user.uid;
+            console.log(uid);
+            const userProfile = await firebase.firestore().collection('users').doc(uid).get();
+
+            console.log(userProfile);
+            let data = {
+                uid: uid,
+                nome: userProfile.data().nome,
+                avatarUrl: userProfile.data().avatarUrl,
+                email: value.user.email
+            };
+
+            setUser(data);
+            storageUser(data);
+            setLoadingAuth(false);
+        })
+        .catch((error)=>{
+            console.log(error);
+            setLoadingAuth(false);
+        });
+    }
+
+    // Cadastro de usuário
     async function signUp(email, password, nome){
         setLoadingAuth(true);
         await firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(async (value) => {
-                let uid = value.user.id;
-                
+                let uid = value.user.uid;
+                console.log(value);
+
                 await firebase.firestore().collection('users')
                 .doc(uid).set({
-                    nome,
+                    nome: nome,
                     avatarUrl: null,
                 })
                 .then( () => {
                     let data = { 
-                        uid,
-                        nome,
+                        uid: uid,
+                        nome: nome,
                         email: value.user.email,
                         avatarUrl: null
                     };
@@ -54,6 +84,7 @@ function AuthProvider({ children }) {
         localStorage.setItem('SistemaUser', JSON.stringify(data));
     }
 
+    // logout do usuário
     async function signOut(){
         await firebase.auth().signOut();
         localStorage.removeItem('SistemaUser');
@@ -67,7 +98,9 @@ function AuthProvider({ children }) {
             user,
             loading,
             signUp,
-            signOut
+            signOut,
+            signIn,
+            loadingAuth
         }}
         >
             {children}
