@@ -121,7 +121,7 @@ export default function New() {
 
                         <label>Assunto:</label>
                         <select value={assunto} onChange={handleChangeSelect}>
-                            <option value="Suporte">Primeira opção</option>
+                            <option value="Suporte">Suporte</option>
                             <option value="Visita Tecnica">Visita Técnica</option>
                             <option value="Financeiro">Financeiro</option>
                         </select>
