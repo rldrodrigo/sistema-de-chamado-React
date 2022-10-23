@@ -53,10 +53,10 @@ export default function Customers() {
                         <label> Nome Fantasia </label>
                         <input type="text" placeholder="Nome da sua empresa" value={nomeFantasia} onChange={ (e) => setNomeFantasia(e.target.value) }/>
 
-                        <label> Nome Fantasia </label>
+                        <label> CNPJ </label>
                         <input type="text" placeholder="Seu CNPJ" value={cnpj} onChange={ (e) => setCnpj(e.target.value) }/>
 
-                        <label> Nome Fantasia </label>
+                        <label> Endereço </label>
                         <input type="text" placeholder="Endereço da empresa" value={endereco} onChange={ (e) => setEndereco(e.target.value) }/>
                     
                         <button type="submit">Cadastrar</button>
