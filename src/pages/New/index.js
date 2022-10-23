@@ -61,9 +61,28 @@ export default function New() {
         setCustomerSelected(e.target.value);
     }
 
-    function handleRegister(e) {
+    async function handleRegister(e) {
         e.preventDefault();
 
+        await firebase.firestore().collection('chamados')
+        .add({
+            created: new Date(),
+            cliente: customers[customerSelected].nomeFantasia,
+            clienteId: customers[customerSelected].id,
+            assunto: assunto,
+            status: status,
+            complemento: complemento,
+            userId: user.uid,
+        })
+        .then(()=> {
+            toast.success("Chamado cadastrado com sucesso!");
+            setComplemento('');
+            setCustomerSelected(0);
+        })
+        .catch((err) => {
+            toast.error("Erro ao registrar, tente mais tarde");
+            console.log(err)
+        })
     }
 
     function handleChangeSelect(e) {
